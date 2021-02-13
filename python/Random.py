@@ -72,9 +72,9 @@ class Random:
       return X
 
     # function returns a random integer using normal distribution (Box-muller)
-    def normal(self, mu=0., sigma=1.0):
+    def normal(self, mu=2., sigma=0.5):
         if sigma <= 0.:
-            sigma = 1.0
+            sigma = 0.5
         
         R1 = self.rand();
         R2 = self.rand();
