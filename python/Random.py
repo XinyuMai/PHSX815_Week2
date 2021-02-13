@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
+import sys
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 
 #################
 # Random class
@@ -68,3 +70,86 @@ class Random:
       X = -math.log(R)/beta
 
       return X
+
+    # function returns a random integer using normal distribution (Box-muller)
+    def normal(self, mu=0., sigma=1.0):
+        if sigma <= 0.:
+            sigma = 1.0
+        
+        R1 = self.rand();
+        R2 = self.rand();
+        
+        y1 = np.sqrt(-2*np.log(R1))*np.cos(2*np.pi*R2)
+        y2 = np.sqrt(-2*np.log(R1))*np.sin(2*np.pi*R2)
+        
+        X = y1*sigma+mu
+        return X
+# main function for this Python code
+if __name__ == "__main__":
+    # if the user includes the flag -h or --help print the options
+    if '-h' in sys.argv or '--help' in sys.argv:
+        print ("Usage: %s [-seed number]" % sys.argv[0])
+        print
+        sys.exit(1)
+
+    # default seed
+    seed = 5555
+
+    # read the user-provided seed from the command line (if there)
+    if '-seed' in sys.argv:
+        p = sys.argv.index('-seed')
+        seed = sys.argv[p+1]
+
+    # set random seed for numpy
+    np.random.seed(seed)
+
+    # class instance of our Random class using seed
+    random = Random(seed)
+
+    # create some random data
+    N = 50000
+
+    # an array of random numbers from numpy
+    x = np.random.rand(N)
+
+################################################################
+    # open a file for writing and assign it to random numbers
+    random_numbers = open('random_Gaussian.txt', 'w')
+
+    # an array of random numbers using our Random class
+    try:
+        for i in range(0,N):
+            line = str(random.normal())
+            random_numbers.write(line)
+            random_numbers.write("\n")
+            #print(line)
+    except ValueError:
+        print("Invalid input")
+
+    random_numbers.close()
+    
+
+# read from generated random number txt file
+print("\nReading the file..." )
+
+out =[]
+with open('random_Gaussian.txt') as f:
+    for line in f:
+        out.append(float(line))
+
+print("\nPlotting..." )
+print("\nPlot saved!")
+# create histogram of our data
+plt.figure(figsize=[10,8])
+plt.style.use('ggplot')
+n, bins, patches = plt.hist(out, 50, density=True, facecolor='c', alpha=0.75)
+
+# plot formating options
+plt.xlabel('Data')
+plt.ylabel('Probability')
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+plt.title('Histogram of random number Gaussian distribution')
+plt.grid(True)
+plt.savefig('Gaussian_random_number.png')
+
