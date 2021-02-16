@@ -89,7 +89,6 @@ if __name__ == "__main__":
     plt.yticks(fontsize=12)
     plt.yscale('log')
     plt.grid(True)
-    plt.show()
     plt.savefig('Times.png')
     
     plt.figure(figsize=[10,8])
@@ -119,7 +118,6 @@ if __name__ == "__main__":
     plt.yticks(fontsize=12)
     plt.title('10 measurements per experiment with Rate of 2.0 cookies/day')
     plt.yscale('log')
-    plt.show()
     plt.savefig('Times_avg.png')
 
 
